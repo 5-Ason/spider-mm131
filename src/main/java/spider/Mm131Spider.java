@@ -183,6 +183,7 @@ public class Mm131Spider implements PageProcessor {
                         .run();
             });
         }
+        pool.shutdown();
     }
 }
 
