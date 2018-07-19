@@ -165,24 +165,22 @@ public class Mm131Spider implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        //  创建一个线程池
+        // 创建一个线程池
         ExecutorService pool = ThreadUtil.newExecutor(6);
-        for (int i = 0; i < Mm131SpiderConstant.IMG_TYPES_URL.size(); i++) {
-            // 图集类型url，总共有6种类型
-            String imgTypeUrl = Mm131SpiderConstant.IMG_TYPES_URL.get(i);
+        // 图集类型url，总共有6种类型
+        Mm131SpiderConstant.IMG_TYPES_URL.forEach(imgTypeUrl -> {
+            String imgTypeName = imgTypeUrl.substring(imgTypeUrl.lastIndexOf("/") + 1);
             // 图片保存路径，不存在则会自动创建
-            String filePath = "F:\\爬虫\\" + imgTypeUrl.substring(imgTypeUrl.lastIndexOf("/") + 1);
-
+            String filePath = "F:\\爬虫\\" + imgTypeName;
             pool.execute(() -> {
                 // 启动爬虫
                 Spider.create(new Mm131Spider(filePath, imgTypeUrl))
                         // 添加爬取的url
                         .addUrl(imgTypeUrl)
                         // 多线程爬取
-                        .thread(5)
-                        .run();
+                        .thread(5).run();
             });
-        }
+        });
         pool.shutdown();
     }
 }
